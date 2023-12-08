@@ -13,6 +13,7 @@ git clone https://github.com/just1nn1t/Oculus.git
 ```python
 
 pip install scapy
+
 pip install paramiko
 
 ```
