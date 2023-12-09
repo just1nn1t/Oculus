@@ -3,7 +3,7 @@
 #meaning that I retain all rights to my source code and no one may reproduce, distribute, or create derivative works from my work.
 #This tool is meant for research and educational purposes only and any malicious usage of this tool is prohibited.
 
-from scapy.all import RadioTap, Dot11Elt, Dot11, sniff
+from scapy.all import *
 import paramiko
 
 #you may change it
