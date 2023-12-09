@@ -13,8 +13,11 @@ git clone https://github.com/just1nn1t/Oculus.git
 ```python
 
 pip install scapy
-
 pip install paramiko
+
+sudo ifconfig <interface> down
+sudo iwconfig <interface> mode monitor
+sudo ifconfig <interface> up
 
 ```
 
