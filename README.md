@@ -23,7 +23,7 @@ sudo ifconfig <interface> up
 
 ## Setup a SFTP server
 
-```php
+```python
 
 (in this case in Ubuntu/Debian)
 
