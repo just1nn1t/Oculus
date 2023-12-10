@@ -21,6 +21,31 @@ sudo ifconfig <interface> up
 
 ```
 
+## Setup a sftp server
+
+```python
+
+(in this case in Ubuntu/Debian)
+
+Install OpenSSH server:
+sudo apt-get update
+sudo apt-get install openssh-server
+
+Edit configuration file (usually located at /etc/ssh/sshd_config):
+sudo nano /etc/ssh/sshd_config
+Subsystem sftp internal-sftp <-- make sure it's there or uncommented
+
+Restart SSH service:
+sudo service ssh restart
+
+Create SFTP user:
+sudo adduser <your_username>
+
+Test it by:
+sftp <your_username>@<your_server_ip>
+
+```
+
 ## Warning& license
 Copyright © 2023 just1nn1t
 
