@@ -8,79 +8,46 @@ import paramiko
 
 #you may change it
 address = 'serverip'
-username = 'username'
-password = 'password'
+usrname = 'username'
+passwd = 'password'
 path = '/path/to/cred.txt'
 
-def getcred(packet):
-	credentials = {}
+def handlepacket(packet):
+	if packet.haslayer(Dot11):
+		data = {}
+		#get SSID
+		ssid = packet[Dot11Elt].info.decode('utf-8', 'ignore')
+			if ssid:
+				data['SSID'] = ssid
+		#get BSSID
+		bssid = packet[Dot11].addr2
+		if bssid:
+			data['BSSID'] = bssid
+		#get security mode
+		if packet.haslayer(Dot11WEP):
+			data['Security Mode'] = "WEP"
+		elif packet.haslayer(Dot11Beacon) and packet.getlayer(Dot11Beacon).cap.privacy:
+			data['Security Mode'] = "WPA or WPA2"
+		elif packet.haslayer(Dot11WPA3_Enterprise) or packet.haslayer(Dot11WPA3_Personal):
+			data['Security Mode'] = "WPA3"
+		else:
+			data['Security Mode'] = "Open"
+		#get channel no.
+		channel = packet.getlayer(RadioTap).Channel
+		if channel:
+			data['Channel'] = channel
+		sendto(data)
 
-	ssid = getssid(packet)
-	if ssid:
-		credentials['SSID'] = ssid
-
-	bssid = getbssid(packet)
-	if bssid:
-		credentials['BSSID'] = bssid
-
-	secmode = getsecmode(packet)
-	if secmode:
-		credentials['Security Mode'] = secmode
-
-	channel = getchannel(packet)
-	if channel:
-		credentials['Channel'] = channel
-
-	return credentials
-
-
-def getssid(packet):
-	if not isinstance(packet, RadioTap) or not isinstance(packet.payload, Dot11Elt):
-		return None
-	#SSID from packet
-	ssid = packet.payload.info.decode('utf-8', 'ignore')
-	return ssid
-
-
-def getbssid(packet):
-	if not isinstance(packet, RadioTap) or not isinstance(packet.payload, Dot11):
-		return None
-	#BSSID from packet
-	bssid = packet.payload.addr2
-	return bssid
-
-
-def getsecmode(packet):
-	if not isinstance(packet, RadioTap) or not isinstance(packet.payload, Dot11):
-		return None
-	#security mode from packet
-	if packet.haslayer(Dot11WEP):
-		secmode = "WEP"
-	elif packet.haslayer(Dot11Beacon) and packet.getlayer(Dot11Beacon).cap.privacy:
-		secmode = "WPA or WPA2"
-	elif packet.haslayer(Dot11WPA3_Enterprise) or packet.haslayer(Dot11WPA3_Personal):
-		secmode = "WPA3"
-	else:
-		secmode = "Open"
-	return secmode
-
-
-def getchannel(packet):
-	if not isinstance(packet, RadioTap):
-		return None
-	#channel no. from packet
-	channel = packet.Channel
-		return channel
-
-
-def sendto(credentials)):
+def sendto(data):
 	try:
-		transp = paramiko.Transport((address, 22))
-		transport.connect(username=username, password=password)
+		#connect to server
+		transport = paramiko.Transport((address, 22))
+		transport.connect(username=usrname, password=passwd)
 		sftp = paramiko.SFTPClient.from_transport(transport)
         
+		#write to file
 		with sftp.file(path, 'a') as f:
-			for key, value in credentials.items():
+			for key, value in data.items():
 				f.write(f"{key}: {value}\n")
 
 		sftp.close()
@@ -89,11 +56,4 @@ def sendto(credentials)):
 	except Exception as e:
 		print(f"Error: {e}")
 
-
-def handlepacket(packet):
-	credentials = getcred(packet)
-	if credentials:
-		sendto(credentials)
-
-#replace 'wlan0' with your wifi interface
 sniff(iface='wlan0', prn=handlepacket)
