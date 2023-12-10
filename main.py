@@ -49,6 +49,7 @@ def sendto(data):
 		with sftp.file(path, 'a') as f:
 			for key, value in data.items():
 				f.write(f"{key}: {value}\n")
+			f.write("\n" + "-"*15 + "\n")
 
 		sftp.close()
 		transport.close()
