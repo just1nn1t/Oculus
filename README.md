@@ -33,7 +33,7 @@ sudo apt-get install openssh-server
 
 Edit configuration file (usually located at /etc/ssh/sshd_config):
 sudo nano /etc/ssh/sshd_config
-Subsystem sftp internal-sftp <-- make sure it's there or uncommented
+subsystem sftp internal-sftp <-- make sure it's there or uncommented
 
 Restart SSH service:
 sudo service ssh restart
