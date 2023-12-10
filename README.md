@@ -27,21 +27,21 @@ sudo ifconfig <interface> up
 
 (in this case in Ubuntu/Debian)
 
-Install OpenSSH server:
+Install OpenSSH Server:
 sudo apt-get update
 sudo apt-get install openssh-server
 
-Edit configuration file (usually located at /etc/ssh/sshd_config):
+Edit Configuration File (usually located at /etc/ssh/sshd_config):
 sudo nano /etc/ssh/sshd_config
 subsystem sftp internal-sftp <-- make sure it's there or uncommented
 
-Restart SSH service:
+Restart SSH Service:
 sudo service ssh restart
 
-Create SFTP user:
+Create SFTP User:
 sudo adduser <your_username>
 
-Test it by:
+Test It By:
 sftp <your_username>@<your_server_ip>
 
 ```
