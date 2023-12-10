@@ -21,7 +21,7 @@ sudo ifconfig <interface> up
 
 ```
 
-## Setup a SFTP server
+## Setup an SFTP server
 
 ```python
 
