@@ -17,8 +17,8 @@ def handlepacket(packet):
 		data = {}
 		#get SSID
 		ssid = packet[Dot11Elt].info.decode('utf-8', 'ignore')
-			if ssid:
-				data['SSID'] = ssid
+		if ssid:
+			data['SSID'] = ssid
 		#get BSSID
 		bssid = packet[Dot11].addr2
 		if bssid:
